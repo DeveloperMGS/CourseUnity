@@ -35,6 +35,15 @@ public partial class @TutorialInpuAction: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""Interact"",
+                    ""type"": ""Button"",
+                    ""id"": ""fbdf0e0c-295d-429a-8d29-2842d8ae4a1c"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -158,6 +167,17 @@ public partial class @TutorialInpuAction: IInputActionCollection2, IDisposable
                     ""action"": ""Move"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""7ec98a77-c888-4820-b879-d8e43ab19cc7"",
+                    ""path"": ""<Keyboard>/e"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Interact"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -167,6 +187,7 @@ public partial class @TutorialInpuAction: IInputActionCollection2, IDisposable
         // TutorialPlayer
         m_TutorialPlayer = asset.FindActionMap("TutorialPlayer", throwIfNotFound: true);
         m_TutorialPlayer_Move = m_TutorialPlayer.FindAction("Move", throwIfNotFound: true);
+        m_TutorialPlayer_Interact = m_TutorialPlayer.FindAction("Interact", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -229,11 +250,13 @@ public partial class @TutorialInpuAction: IInputActionCollection2, IDisposable
     private readonly InputActionMap m_TutorialPlayer;
     private List<ITutorialPlayerActions> m_TutorialPlayerActionsCallbackInterfaces = new List<ITutorialPlayerActions>();
     private readonly InputAction m_TutorialPlayer_Move;
+    private readonly InputAction m_TutorialPlayer_Interact;
     public struct TutorialPlayerActions
     {
         private @TutorialInpuAction m_Wrapper;
         public TutorialPlayerActions(@TutorialInpuAction wrapper) { m_Wrapper = wrapper; }
         public InputAction @Move => m_Wrapper.m_TutorialPlayer_Move;
+        public InputAction @Interact => m_Wrapper.m_TutorialPlayer_Interact;
         public InputActionMap Get() { return m_Wrapper.m_TutorialPlayer; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -246,6 +269,9 @@ public partial class @TutorialInpuAction: IInputActionCollection2, IDisposable
             @Move.started += instance.OnMove;
             @Move.performed += instance.OnMove;
             @Move.canceled += instance.OnMove;
+            @Interact.started += instance.OnInteract;
+            @Interact.performed += instance.OnInteract;
+            @Interact.canceled += instance.OnInteract;
         }
 
         private void UnregisterCallbacks(ITutorialPlayerActions instance)
@@ -253,6 +279,9 @@ public partial class @TutorialInpuAction: IInputActionCollection2, IDisposable
             @Move.started -= instance.OnMove;
             @Move.performed -= instance.OnMove;
             @Move.canceled -= instance.OnMove;
+            @Interact.started -= instance.OnInteract;
+            @Interact.performed -= instance.OnInteract;
+            @Interact.canceled -= instance.OnInteract;
         }
 
         public void RemoveCallbacks(ITutorialPlayerActions instance)
@@ -273,5 +302,6 @@ public partial class @TutorialInpuAction: IInputActionCollection2, IDisposable
     public interface ITutorialPlayerActions
     {
         void OnMove(InputAction.CallbackContext context);
+        void OnInteract(InputAction.CallbackContext context);
     }
 }

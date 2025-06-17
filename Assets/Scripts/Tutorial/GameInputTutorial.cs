@@ -1,15 +1,22 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class GameInputTutorial : MonoBehaviour
 {
+    public event EventHandler OnInteractAction;
     private TutorialInpuAction tutorialInpuAction;  
     public void Awake()
     {
         tutorialInpuAction = new TutorialInpuAction();
         tutorialInpuAction.TutorialPlayer.Enable(); // Включаем действия
+        tutorialInpuAction.TutorialPlayer.Interact.performed += Interact_Perfomed;
+    }
+
+    private void Interact_Perfomed(InputAction.CallbackContext obj)
+    {
+    if (OnInteractAction != null)
+        OnInteractAction(this, EventArgs.Empty);;
     }
 
     public Vector2 GetMovementVectorNormalized()
@@ -19,5 +26,10 @@ public class GameInputTutorial : MonoBehaviour
         Debug.Log(tutorialInpuAction);
         
         return inputVector;
+    }
+
+    public void JumpJump()
+    {
+     
     }
 }
